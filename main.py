@@ -3,12 +3,12 @@ from pprint import pprint
 from argparse import ArgumentParser
 
 parser = ArgumentParser()
-parser.add_argument("-p", "--period", default=30)
+parser.add_argument("-p", "--period")
 
 args = parser.parse_args()
 
 
-def get_vacancies(period):
+def get_vacancies(search_query, period=30):
 
     url = "https://api.hh.ru/vacancies"
 
@@ -16,7 +16,7 @@ def get_vacancies(period):
         "HH-User-Agent": ""
     }
     params = {
-        "text": "Программист",
+        "text": search_query,
         "area": 1,
         "period": period,
         "order_by": "relevance"
@@ -29,7 +29,23 @@ def get_vacancies(period):
 
 
 if __name__ == '__main__':
-    vacancies = get_vacancies(args.period)
 
-    pprint(vacancies.text)
-    print(vacancies.url)
+    vacancies = {}
+    languages_list = [
+        "JavaScript",
+        "Java",
+        "Python",
+        "Ruby",
+        "PHP",
+        "C++",
+        "C#",
+        "C",
+        "Go",
+        "Shell"
+    ]
+
+    for language in languages_list:
+        search_query = f"Программист {language}"
+        vacancies[language] = get_vacancies(search_query).json()["found"]
+
+    pprint(vacancies)
