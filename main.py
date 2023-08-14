@@ -28,6 +28,10 @@ def get_vacancies(search_query, period=30):
     return response
 
 
+def get_salary(vacancy):
+    return vacancy["salary"]
+
+
 if __name__ == '__main__':
 
     vacancies = {}
@@ -48,4 +52,6 @@ if __name__ == '__main__':
         search_query = f"Программист {language}"
         vacancies[language] = get_vacancies(search_query).json()["found"]
 
-    pprint(vacancies)
+    python_vacancies = get_vacancies("Программист Python")
+    for vacancy in python_vacancies.json()["items"]:
+        print(get_salary(vacancy))
