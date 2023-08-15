@@ -1,8 +1,22 @@
 import requests
 from pprint import pprint
+from argparse import ArgumentParser
+
+parser = ArgumentParser()
+parser.add_argument("-d", "--days")
+parser.add_argument(
+    "-p",
+    "--pages",
+    help="number of pages",
+    type=int,
+    choices=range(1, 100),
+    metavar="[1-99]"
+)
+
+args = parser.parse_args()
 
 
-def get_vacancies(search_query, period=None):
+def get_vacancies(search_query, period=None, page=0):
 
     url = "https://api.hh.ru/vacancies"
 
@@ -13,7 +27,8 @@ def get_vacancies(search_query, period=None):
         "text": search_query,
         "area": 1,
         "period": period,
-        "order_by": "relevance"
+        "order_by": "relevance",
+        "page": page
     }
 
     response = requests.get(url, headers=headers, params=params)
@@ -56,16 +71,28 @@ if __name__ == '__main__':
 
     for language in languages_list:
         search_query = f"Программист {language}"
-        language_vacancies = get_vacancies(search_query, 30).json()
+        pages = args.pages
+        list_of_vacancies_pages = []
+
+        for page in range(pages):
+            language_vacancies_page = get_vacancies(search_query, period=args.days, page=page).json()
+            list_of_vacancies_pages.append(language_vacancies_page)
+
+        number_found = list_of_vacancies_pages[0]["found"]
+        language_vacancies = []
+        for vacancy_page in list_of_vacancies_pages:
+            for vacancy in vacancy_page["items"]:
+                language_vacancies.append(vacancy)
+
         predicted_salaries = []
 
-        for vacancy in language_vacancies["items"]:
+        for vacancy in language_vacancies:
             predicted_salary = predict_rub_salary(vacancy)
             if predicted_salary is not None:
                 predicted_salaries.append(predicted_salary)
 
         vacancies[language] = {
-            "vacancies_found": language_vacancies["found"],
+            "vacancies_found": number_found,
             "vacancies_processed": len(predicted_salaries),
             "average_salary": int(sum(predicted_salaries)/len(predicted_salaries))
         }
