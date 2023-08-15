@@ -1,12 +1,5 @@
 import requests
 from pprint import pprint
-from argparse import ArgumentParser
-
-# parser = ArgumentParser()
-# parser.add_argument("-p", "--period")
-# # parser.add_argument("-t","--text", help="vacancy search query")
-#
-# args = parser.parse_args()
 
 
 def get_vacancies(search_query, period=None):
@@ -47,6 +40,7 @@ def predict_rub_salary(vacancy):
 
 if __name__ == '__main__':
 
+    vacancies = {}
     languages_list = [
         "JavaScript",
         "Java",
@@ -60,12 +54,20 @@ if __name__ == '__main__':
         "Shell"
     ]
 
-    # for language in languages_list:
-    #     search_query = f"Программист {language}"
-    #     vacancies[language] = get_vacancies(search_query).json()["found"]
+    for language in languages_list:
+        search_query = f"Программист {language}"
+        language_vacancies = get_vacancies(search_query, 30).json()
+        predicted_salaries = []
 
-    vacancies = get_vacancies("Программист Python", 30)
+        for vacancy in language_vacancies["items"]:
+            predicted_salary = predict_rub_salary(vacancy)
+            if predicted_salary is not None:
+                predicted_salaries.append(predicted_salary)
 
-    for vacancy in vacancies.json()["items"]:
-        predicted_salary = predict_rub_salary(vacancy)
-        print(predicted_salary)
+        vacancies[language] = {
+            "vacancies_found": language_vacancies["found"],
+            "vacancies_processed": len(predicted_salaries),
+            "average_salary": int(sum(predicted_salaries)/len(predicted_salaries))
+        }
+
+    pprint(vacancies, sort_dicts=False)
