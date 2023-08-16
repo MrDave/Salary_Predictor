@@ -2,6 +2,7 @@ import requests
 from pprint import pprint
 from argparse import ArgumentParser
 from time import sleep
+import datetime
 
 
 parser = ArgumentParser()
@@ -13,6 +14,12 @@ parser.add_argument(
     type=int,
     choices=range(1, 100),
     metavar="[1-99]"
+)
+parser.add_argument(
+    "-t",
+    "--timer",
+    action="store_true",
+    help="add start and end time of script running after the results"
 )
 
 args = parser.parse_args()
@@ -56,6 +63,8 @@ def predict_rub_salary(vacancy):
 
 
 if __name__ == '__main__':
+
+    start_time = datetime.datetime.now()
 
     vacancies = {}
     languages_list = [
@@ -102,3 +111,7 @@ if __name__ == '__main__':
     sleep(5)
 
     pprint(vacancies, sort_dicts=False)
+    end_time = datetime.datetime.now()
+    run_time = (end_time - start_time).seconds
+    if args.time:
+        print(f"Start time: {start_time}\nEnd time: {end_time}\nTotal: {run_time}")
