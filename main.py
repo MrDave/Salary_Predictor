@@ -1,6 +1,8 @@
 import requests
 from pprint import pprint
 from argparse import ArgumentParser
+from time import sleep
+
 
 parser = ArgumentParser()
 parser.add_argument("-d", "--days")
@@ -77,6 +79,7 @@ if __name__ == '__main__':
         for page in range(pages):
             language_vacancies_page = get_vacancies(search_query, period=args.days, page=page).json()
             list_of_vacancies_pages.append(language_vacancies_page)
+            sleep(1)
 
         number_found = list_of_vacancies_pages[0]["found"]
         language_vacancies = []
@@ -96,5 +99,6 @@ if __name__ == '__main__':
             "vacancies_processed": len(predicted_salaries),
             "average_salary": int(sum(predicted_salaries)/len(predicted_salaries))
         }
+    sleep(5)
 
     pprint(vacancies, sort_dicts=False)
