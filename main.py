@@ -13,7 +13,8 @@ parser.add_argument(
     help="number of pages",
     type=int,
     choices=range(1, 100),
-    metavar="[1-99]"
+    metavar="[1-99]",
+    default=1
 )
 parser.add_argument(
     "-t",
@@ -46,20 +47,24 @@ def get_vacancies(search_query, period=None, page=0):
     return response
 
 
+def predict_salary(salary_from, salary_to):
+    if salary_from and salary_to:
+        predicted_salary = (salary_from + salary_to) / 2
+    elif salary_from:
+        predicted_salary = salary_from * 1.2
+    elif salary_to:
+        predicted_salary = salary_to * 0.8
+    else:
+        return None
+    return predicted_salary
+
+
 def predict_rub_salary(vacancy):
     salary_info = vacancy["salary"]
     if salary_info is None or salary_info.get("currency") != "RUR":
         return None
-
-    if salary_info.get("from") and salary_info.get("to"):
-        predicted_salary = (salary_info.get("from") + salary_info.get("to")) / 2
-    elif salary_info.get("from"):
-        predicted_salary = salary_info.get("from") * 1.2
-    elif salary_info.get("to"):
-        predicted_salary = salary_info.get("to") * 0.8
-    else:
-        return None
-    return predicted_salary
+    predicted_hh_salary = predict_salary(salary_info.get("from"), salary_info.get("to"))
+    return predicted_hh_salary
 
 
 if __name__ == '__main__':
@@ -88,7 +93,7 @@ if __name__ == '__main__':
         for page in range(pages):
             language_vacancies_page = get_vacancies(search_query, period=args.days, page=page).json()
             list_of_vacancies_pages.append(language_vacancies_page)
-            sleep(1)
+            sleep(0.5)
 
         number_found = list_of_vacancies_pages[0]["found"]
         language_vacancies = []
@@ -108,10 +113,10 @@ if __name__ == '__main__':
             "vacancies_processed": len(predicted_salaries),
             "average_salary": int(sum(predicted_salaries)/len(predicted_salaries))
         }
-    sleep(5)
+    sleep(2)
 
     pprint(vacancies, sort_dicts=False)
     end_time = datetime.datetime.now()
     run_time = (end_time - start_time).seconds
-    if args.time:
-        print(f"Start time: {start_time}\nEnd time: {end_time}\nTotal: {run_time}")
+    if args.timer:
+        print(f"Start time: {start_time}\nEnd time: {end_time}\nTotal time: {run_time} second(s)")
