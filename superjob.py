@@ -4,7 +4,6 @@ import requests
 from main import predict_salary
 from argparse import ArgumentParser
 import datetime
-from time import sleep
 
 parser = ArgumentParser()
 parser.add_argument(
@@ -83,7 +82,6 @@ def main():
         for page in range(pages):
             language_vacancies_page = get_sj_vacancies(sj_key, keyword, page).json()
             list_of_vacancies_pages.append(language_vacancies_page)
-            sleep(0.5)
 
         number_found = list_of_vacancies_pages[0]["total"]
         language_vacancies = []
@@ -105,7 +103,6 @@ def main():
             "vacancies_processed": len(predicted_salaries),
             "average_salary": avg_salary
         }
-    sleep(2)
 
     pprint(vacancies, sort_dicts=False)
     end_time = datetime.datetime.now()
