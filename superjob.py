@@ -5,25 +5,6 @@ from main import predict_salary
 from argparse import ArgumentParser
 import datetime
 
-parser = ArgumentParser()
-parser.add_argument(
-    "-p",
-    "--pages",
-    help="number of pages",
-    type=int,
-    choices=range(1, 25),
-    metavar="[1-25]",
-    default=1
-)
-parser.add_argument(
-    "-t",
-    "--timer",
-    action="store_true",
-    help="add start and end time of script running after the results"
-)
-
-args = parser.parse_args()
-
 
 def get_sj_vacancies(secret_key: str, keyword: str, page=0):
 
@@ -53,6 +34,25 @@ def predict_sj_rub_salary(vacancy):
 
 
 def main():
+    parser = ArgumentParser()
+    parser.add_argument(
+        "-p",
+        "--pages",
+        help="number of pages",
+        type=int,
+        choices=range(1, 25),
+        metavar="[1-25]",
+        default=1
+    )
+    parser.add_argument(
+        "-t",
+        "--timer",
+        action="store_true",
+        help="add start and end time of script running after the results"
+    )
+
+    args = parser.parse_args()
+    
     env = Env()
     env.read_env()
 

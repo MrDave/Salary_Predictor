@@ -5,27 +5,6 @@ from time import sleep
 import datetime
 
 
-parser = ArgumentParser()
-parser.add_argument("-d", "--days")
-parser.add_argument(
-    "-p",
-    "--pages",
-    help="number of pages",
-    type=int,
-    choices=range(1, 100),
-    metavar="[1-99]",
-    default=1
-)
-parser.add_argument(
-    "-t",
-    "--timer",
-    action="store_true",
-    help="add start and end time of script running after the results"
-)
-
-args = parser.parse_args()
-
-
 def get_vacancies(search_query, period=None, page=0):
 
     url = "https://api.hh.ru/vacancies"
@@ -68,6 +47,26 @@ def predict_rub_salary(vacancy):
 
 
 if __name__ == '__main__':
+
+    parser = ArgumentParser()
+    parser.add_argument("-d", "--days")
+    parser.add_argument(
+        "-p",
+        "--pages",
+        help="number of pages",
+        type=int,
+        choices=range(1, 100),
+        metavar="[1-99]",
+        default=1
+    )
+    parser.add_argument(
+        "-t",
+        "--timer",
+        action="store_true",
+        help="add start and end time of script running after the results"
+    )
+
+    args = parser.parse_args()
 
     start_time = datetime.datetime.now()
 
