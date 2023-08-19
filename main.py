@@ -4,8 +4,8 @@ from time import sleep
 import datetime
 from functions import get_hh_page_count, get_hh_vacancies, predict_hh_rub_salary
 
-if __name__ == '__main__':
 
+def main():
     parser = ArgumentParser()
     parser.add_argument("-d", "--days")
     parser.add_argument(
@@ -88,3 +88,7 @@ if __name__ == '__main__':
     run_time = (end_time - start_time).seconds
     if args.timer:
         print(f"Start time: {start_time}\nEnd time: {end_time}\nTotal time: {run_time} second(s)")
+
+
+if __name__ == '__main__':
+    main()
