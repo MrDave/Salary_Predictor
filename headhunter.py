@@ -5,37 +5,7 @@ from time import sleep
 import datetime
 
 
-def print_hh_table():
-    parser = ArgumentParser()
-    parser.add_argument(
-        "-d",
-        "--days",
-        default=30
-    )
-    parser.add_argument(
-        "-p",
-        "--pages",
-        help="number of pages",
-        type=int,
-        choices=range(1, 100),
-        metavar="[1-99]",
-        default=1
-    )
-    parser.add_argument(
-        "-s",
-        "--single",
-        help="fetch only a single page instead of all",
-        action="store_true"
-    )
-    parser.add_argument(
-        "-t",
-        "--timer",
-        action="store_true",
-        help="add start and end time of script running after the results"
-    )
-
-    args = parser.parse_args()
-
+def print_hh_table(args):
     start_time = datetime.datetime.now()
 
     vacancies = {}
@@ -62,11 +32,11 @@ def print_hh_table():
         pages = get_hh_page_count(language_vacancies_page_0)
         list_of_vacancies_pages.append(language_vacancies_page_0)
 
-        # if not args.single:
-        #     for page in range(1, pages):
-        #         language_vacancies_page = get_hh_vacancies(search_query, period=args.days, page=page).json()
-        #         list_of_vacancies_pages.append(language_vacancies_page)
-        #         sleep(0.5)
+        if not args.single:
+            for page in range(1, pages):
+                language_vacancies_page = get_hh_vacancies(search_query, period=30, page=page).json()
+                list_of_vacancies_pages.append(language_vacancies_page)
+                sleep(0.5)
 
         language_vacancies = []
         for vacancy_page in list_of_vacancies_pages:
@@ -108,4 +78,20 @@ def print_hh_table():
 
 
 if __name__ == '__main__':
-    print_hh_table()
+    parser = ArgumentParser()
+    parser.add_argument(
+        "-s",
+        "--single",
+        help="fetch only a single page instead of all",
+        action="store_true"
+    )
+    parser.add_argument(
+        "-t",
+        "--timer",
+        action="store_true",
+        help="add start and end time of script running after the results"
+    )
+
+    args = parser.parse_args()
+
+    print_hh_table(args)

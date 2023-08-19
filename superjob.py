@@ -5,37 +5,7 @@ from terminaltables import AsciiTable
 import datetime
 
 
-def print_sj_table():
-    parser = ArgumentParser()
-    # parser.add_argument(
-    #     "-p",
-    #     "--pages",
-    #     help="number of pages",
-    #     type=int,
-    #     choices=range(1, 25),
-    #     metavar="[1-25]",
-    #     default=1
-    # )
-    parser.add_argument(
-        "-s",
-        "--single",
-        help="fetch only a single page instead of all",
-        action="store_true"
-    )
-    parser.add_argument(
-        "-t",
-        "--timer",
-        action="store_true",
-        help="add start and end time of script running after the results"
-    )
-
-    args = parser.parse_args()
-    
-    env = Env()
-    env.read_env()
-
-    sj_key = env.str("SJ_KEY")
-
+def print_sj_table(sj_key, args):
     start_time = datetime.datetime.now()
 
     vacancies = {}
@@ -107,4 +77,25 @@ def print_sj_table():
 
 
 if __name__ == '__main__':
-    print_sj_table()
+    parser = ArgumentParser()
+    parser.add_argument(
+        "-s",
+        "--single",
+        help="fetch only a single page instead of all",
+        action="store_true"
+    )
+    parser.add_argument(
+        "-t",
+        "--timer",
+        action="store_true",
+        help="add start and end time of script running after the results"
+    )
+
+    args = parser.parse_args()
+
+    env = Env()
+    env.read_env()
+
+    sj_key = env.str("SJ_KEY")
+
+    print_sj_table(sj_key, args)
