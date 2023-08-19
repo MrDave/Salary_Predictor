@@ -1,36 +1,8 @@
 from environs import Env
 from pprint import pprint
-import requests
-from main import predict_salary
+from functions import get_sj_vacancies, predict_sj_rub_salary
 from argparse import ArgumentParser
 import datetime
-
-
-def get_sj_vacancies(secret_key: str, keyword: str, page=0):
-
-    url = "https://api.superjob.ru/2.0/vacancies/"
-    headers = {
-        "X-Api-App-Id": secret_key
-    }
-
-    params = {
-        "catalogues": 48,
-        "town": 4,
-        "keyword": keyword,
-        "count": 20,
-        "page": page
-    }
-
-    response = requests.get(url, headers=headers, params=params)
-    response.raise_for_status()
-
-    return response
-
-
-def predict_sj_rub_salary(vacancy):
-    if vacancy["currency"] != "rub":
-        return None
-    return predict_salary(vacancy["payment_from"], vacancy["payment_to"])
 
 
 def main():
