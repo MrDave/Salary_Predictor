@@ -13,10 +13,10 @@ def get_hh_page_count(response_dict):
 
 def get_sj_page_count(response_dict):
     page_count = ceil(response_dict["total"] / 20)
-    if page_count > 24:
-        return
+    if page_count > 25:
+        return 24
     else:
-        return page_count
+        return page_count - 1
 
 
 def get_hh_vacancies(search_query, period=None, page=0):
