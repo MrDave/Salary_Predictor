@@ -1,50 +1,8 @@
-import requests
 from pprint import pprint
 from argparse import ArgumentParser
 from time import sleep
 import datetime
-
-
-def get_vacancies(search_query, period=None, page=0):
-
-    url = "https://api.hh.ru/vacancies"
-
-    headers = {
-        "HH-User-Agent": ""
-    }
-    params = {
-        "text": search_query,
-        "area": 1,
-        "period": period,
-        "order_by": "relevance",
-        "page": page
-    }
-
-    response = requests.get(url, headers=headers, params=params)
-    response.raise_for_status()
-
-    return response
-
-
-def predict_salary(salary_from, salary_to):
-    if salary_from and salary_to:
-        predicted_salary = (salary_from + salary_to) / 2
-    elif salary_from:
-        predicted_salary = salary_from * 1.2
-    elif salary_to:
-        predicted_salary = salary_to * 0.8
-    else:
-        return None
-    return predicted_salary
-
-
-def predict_rub_salary(vacancy):
-    salary_info = vacancy["salary"]
-    if salary_info is None or salary_info.get("currency") != "RUR":
-        return None
-    predicted_hh_salary = predict_salary(salary_info.get("from"), salary_info.get("to"))
-    return predicted_hh_salary
-
+from functions import get_hh_page_count, get_hh_vacancies, predict_hh_rub_salary
 
 if __name__ == '__main__':
 
@@ -58,6 +16,12 @@ if __name__ == '__main__':
         choices=range(1, 100),
         metavar="[1-99]",
         default=1
+    )
+    parser.add_argument(
+        "-s",
+        "--single",
+        help="fetch only a single page instead of all",
+        action="store_true"
     )
     parser.add_argument(
         "-t",
@@ -86,15 +50,20 @@ if __name__ == '__main__':
 
     for language in languages_list:
         search_query = f"Программист {language}"
-        pages = args.pages
+
         list_of_vacancies_pages = []
 
-        for page in range(pages):
-            language_vacancies_page = get_vacancies(search_query, period=args.days, page=page).json()
-            list_of_vacancies_pages.append(language_vacancies_page)
-            sleep(0.5)
+        language_vacancies_page_0 = get_hh_vacancies(search_query, 30).json()
+        number_found = language_vacancies_page_0["found"]
+        pages = get_hh_page_count(language_vacancies_page_0)
+        list_of_vacancies_pages.append(language_vacancies_page_0)
 
-        number_found = list_of_vacancies_pages[0]["found"]
+        if not args.single:
+            for page in range(1, pages):
+                language_vacancies_page = get_hh_vacancies(search_query, period=args.days, page=page).json()
+                list_of_vacancies_pages.append(language_vacancies_page)
+                sleep(0.5)
+
         language_vacancies = []
         for vacancy_page in list_of_vacancies_pages:
             for vacancy in vacancy_page["items"]:
@@ -103,7 +72,7 @@ if __name__ == '__main__':
         predicted_salaries = []
 
         for vacancy in language_vacancies:
-            predicted_salary = predict_rub_salary(vacancy)
+            predicted_salary = predict_hh_rub_salary(vacancy)
             if predicted_salary is not None:
                 predicted_salaries.append(predicted_salary)
 

@@ -1,20 +1,26 @@
 from environs import Env
 from pprint import pprint
-from functions import get_sj_vacancies, predict_sj_rub_salary
+from functions import get_sj_vacancies, predict_sj_rub_salary, get_sj_page_count
 from argparse import ArgumentParser
 import datetime
 
 
 def main():
     parser = ArgumentParser()
+    # parser.add_argument(
+    #     "-p",
+    #     "--pages",
+    #     help="number of pages",
+    #     type=int,
+    #     choices=range(1, 25),
+    #     metavar="[1-25]",
+    #     default=1
+    # )
     parser.add_argument(
-        "-p",
-        "--pages",
-        help="number of pages",
-        type=int,
-        choices=range(1, 25),
-        metavar="[1-25]",
-        default=1
+        "-s",
+        "--single",
+        help="fetch only a single page instead of all",
+        action="store_true"
     )
     parser.add_argument(
         "-t",
@@ -48,14 +54,18 @@ def main():
 
     for language in languages_list:
         keyword = language
-        pages = args.pages
         list_of_vacancies_pages = []
 
-        for page in range(pages):
-            language_vacancies_page = get_sj_vacancies(sj_key, keyword, page).json()
-            list_of_vacancies_pages.append(language_vacancies_page)
+        language_vacancies_page_0 = get_sj_vacancies(sj_key, keyword).json()
+        number_found = language_vacancies_page_0["total"]
+        pages = get_sj_page_count(language_vacancies_page_0)
+        list_of_vacancies_pages.append(language_vacancies_page_0)
 
-        number_found = list_of_vacancies_pages[0]["total"]
+        if not args.single:
+            for page in range(1, pages):
+                language_vacancies_page = get_sj_vacancies(sj_key, keyword, page).json()
+                list_of_vacancies_pages.append(language_vacancies_page)
+
         language_vacancies = []
         for vacancy_page in list_of_vacancies_pages:
             for vacancy in vacancy_page["objects"]:
