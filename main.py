@@ -4,7 +4,9 @@ from environs import Env
 from argparse import ArgumentParser
 
 if __name__ == '__main__':
-    parser = ArgumentParser()
+    parser = ArgumentParser(
+        description="Get job offers from HeadHunter and SuperJob websites and compare their average salaries"
+    )
     parser.add_argument(
         "-s",
         "--single",

@@ -78,7 +78,9 @@ def print_hh_table(args):
 
 
 if __name__ == '__main__':
-    parser = ArgumentParser()
+    parser = ArgumentParser(
+        description="Get job offers from HeadHunter website and compare their average salaries"
+    )
     parser.add_argument(
         "-s",
         "--single",

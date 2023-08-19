@@ -77,7 +77,9 @@ def print_sj_table(sj_key, args):
 
 
 if __name__ == '__main__':
-    parser = ArgumentParser()
+    parser = ArgumentParser(
+        description="Get job offers from and SuperJob website and compare their average salaries"
+    )
     parser.add_argument(
         "-s",
         "--single",
