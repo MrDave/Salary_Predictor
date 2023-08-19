@@ -1,11 +1,11 @@
-from environs import Env
-from pprint import pprint
-from functions import get_sj_vacancies, predict_sj_rub_salary, get_sj_page_count
 from argparse import ArgumentParser
+from environs import Env
+from functions import get_sj_vacancies, predict_sj_rub_salary, get_sj_page_count
+from terminaltables import AsciiTable
 import datetime
 
 
-def main():
+def print_sj_table():
     parser = ArgumentParser()
     # parser.add_argument(
     #     "-p",
@@ -86,7 +86,20 @@ def main():
             "average_salary": avg_salary
         }
 
-    pprint(vacancies, sort_dicts=False)
+    header_row = [
+        "Language",
+        "Vacancies Found",
+        "Vacancies Processed",
+        "Average Salary, RUB"
+    ]
+    table_data = [header_row]
+    for language in languages_list:
+        new_row = [language] + list(vacancies[language].values())
+        table_data.append(new_row)
+    table = AsciiTable(table_data, "SuperJob Moscow")
+    print()
+    print(table.table)
+
     end_time = datetime.datetime.now()
     run_time = (end_time - start_time).seconds
     if args.timer:
@@ -94,4 +107,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    print_sj_table()

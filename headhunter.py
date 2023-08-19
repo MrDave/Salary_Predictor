@@ -1,13 +1,17 @@
-from pprint import pprint
 from argparse import ArgumentParser
+from functions import get_hh_page_count, get_hh_vacancies, predict_hh_rub_salary
+from terminaltables import AsciiTable
 from time import sleep
 import datetime
-from functions import get_hh_page_count, get_hh_vacancies, predict_hh_rub_salary
 
 
-def main():
+def print_hh_table():
     parser = ArgumentParser()
-    parser.add_argument("-d", "--days")
+    parser.add_argument(
+        "-d",
+        "--days",
+        default=30
+    )
     parser.add_argument(
         "-p",
         "--pages",
@@ -58,11 +62,11 @@ def main():
         pages = get_hh_page_count(language_vacancies_page_0)
         list_of_vacancies_pages.append(language_vacancies_page_0)
 
-        if not args.single:
-            for page in range(1, pages):
-                language_vacancies_page = get_hh_vacancies(search_query, period=args.days, page=page).json()
-                list_of_vacancies_pages.append(language_vacancies_page)
-                sleep(0.5)
+        # if not args.single:
+        #     for page in range(1, pages):
+        #         language_vacancies_page = get_hh_vacancies(search_query, period=args.days, page=page).json()
+        #         list_of_vacancies_pages.append(language_vacancies_page)
+        #         sleep(0.5)
 
         language_vacancies = []
         for vacancy_page in list_of_vacancies_pages:
@@ -83,7 +87,20 @@ def main():
         }
     sleep(2)
 
-    pprint(vacancies, sort_dicts=False)
+    header_row = [
+        "Language",
+        "Vacancies Found",
+        "Vacancies Processed",
+        "Average Salary, RUB"
+    ]
+    table_data = [header_row]
+    for language in languages_list:
+        new_row = [language] + list(vacancies[language].values())
+        table_data.append(new_row)
+    table = AsciiTable(table_data, "HeadHunter Moscow")
+    print()
+    print(table.table)
+
     end_time = datetime.datetime.now()
     run_time = (end_time - start_time).seconds
     if args.timer:
@@ -91,4 +108,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    print_hh_table()
