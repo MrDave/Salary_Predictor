@@ -9,7 +9,7 @@ def print_hh_table(args):
     start_time = datetime.datetime.now()
 
     vacancies = {}
-    languages_list = [
+    languages = [
         "JavaScript",
         "Java",
         "Python",
@@ -22,24 +22,24 @@ def print_hh_table(args):
         "Shell"
     ]
 
-    for language in languages_list:
+    for language in languages:
         search_query = f"Программист {language}"
 
-        list_of_vacancies_pages = []
+        vacancies_pages = []
 
         language_vacancies_page_0 = get_hh_vacancies(search_query, 30).json()
         number_found = language_vacancies_page_0["found"]
         pages = get_hh_page_count(language_vacancies_page_0)
-        list_of_vacancies_pages.append(language_vacancies_page_0)
+        vacancies_pages.append(language_vacancies_page_0)
 
         if not args.single:
             for page in range(1, pages):
                 language_vacancies_page = get_hh_vacancies(search_query, period=30, page=page).json()
-                list_of_vacancies_pages.append(language_vacancies_page)
+                vacancies_pages.append(language_vacancies_page)
                 sleep(0.5)
 
         language_vacancies = []
-        for vacancy_page in list_of_vacancies_pages:
+        for vacancy_page in vacancies_pages:
             for vacancy in vacancy_page["items"]:
                 language_vacancies.append(vacancy)
 
@@ -64,7 +64,7 @@ def print_hh_table(args):
         "Average Salary, RUB"
     ]
     table_data = [header_row]
-    for language in languages_list:
+    for language in languages:
         new_row = [language] + list(vacancies[language].values())
         table_data.append(new_row)
     table = AsciiTable(table_data, "HeadHunter Moscow")

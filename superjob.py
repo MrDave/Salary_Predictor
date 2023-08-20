@@ -9,7 +9,7 @@ def print_sj_table(sj_key, args):
     start_time = datetime.datetime.now()
 
     vacancies = {}
-    languages_list = [
+    languages = [
         "JavaScript",
         "Java",
         "Python",
@@ -22,22 +22,22 @@ def print_sj_table(sj_key, args):
         "Shell"
     ]
 
-    for language in languages_list:
+    for language in languages:
         keyword = language
-        list_of_vacancies_pages = []
+        vacancies_pages = []
 
         language_vacancies_page_0 = get_sj_vacancies(sj_key, keyword).json()
         number_found = language_vacancies_page_0["total"]
         pages = get_sj_page_count(language_vacancies_page_0)
-        list_of_vacancies_pages.append(language_vacancies_page_0)
+        vacancies_pages.append(language_vacancies_page_0)
 
         if not args.single:
             for page in range(1, pages):
                 language_vacancies_page = get_sj_vacancies(sj_key, keyword, page).json()
-                list_of_vacancies_pages.append(language_vacancies_page)
+                vacancies_pages.append(language_vacancies_page)
 
         language_vacancies = []
-        for vacancy_page in list_of_vacancies_pages:
+        for vacancy_page in vacancies_pages:
             for vacancy in vacancy_page["objects"]:
                 language_vacancies.append(vacancy)
 
@@ -63,7 +63,7 @@ def print_sj_table(sj_key, args):
         "Average Salary, RUB"
     ]
     table_data = [header_row]
-    for language in languages_list:
+    for language in languages:
         new_row = [language] + list(vacancies[language].values())
         table_data.append(new_row)
     table = AsciiTable(table_data, "SuperJob Moscow")
