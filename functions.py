@@ -54,7 +54,7 @@ def predict_salary(salary_from, salary_to):
 
 def predict_hh_rub_salary(vacancy):
     salary_info = vacancy["salary"]
-    if salary_info is None or salary_info.get("currency") != "RUR":
+    if not salary_info or salary_info.get("currency") != "RUR":
         return None
     predicted_hh_salary = predict_salary(salary_info.get("from"), salary_info.get("to"))
     return predicted_hh_salary
