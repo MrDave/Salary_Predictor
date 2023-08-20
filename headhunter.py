@@ -49,11 +49,14 @@ def print_hh_table(args):
             predicted_salary = predict_hh_rub_salary(vacancy)
             if predicted_salary:
                 predicted_salaries.append(predicted_salary)
-        
+        try:
+            avg_salary = int(sum(predicted_salaries) / len(predicted_salaries))
+        except ZeroDivisionError:
+            avg_salary = "-"
         vacancies[language] = {
             "vacancies_found": number_found,
             "vacancies_processed": len(predicted_salaries),
-            "average_salary": int(sum(predicted_salaries)/len(predicted_salaries))
+            "average_salary": avg_salary
         }
     sleep(2)
 
