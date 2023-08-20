@@ -1,6 +1,6 @@
 from argparse import ArgumentParser
 from environs import Env
-from functions import get_sj_vacancies, predict_sj_rub_salary
+from functions import get_sj_response, predict_sj_rub_salary
 from math import ceil
 from terminaltables import AsciiTable
 import datetime
@@ -27,14 +27,14 @@ def print_sj_table(sj_key, args):
         keyword = language
         vacancies_pages = []
 
-        language_vacancies_page_0 = get_sj_vacancies(sj_key, keyword).json()
+        language_vacancies_page_0 = get_sj_response(sj_key, keyword).json()
         number_found = language_vacancies_page_0["total"]
         pages = ceil(number_found / 20)
         vacancies_pages.append(language_vacancies_page_0)
 
         if not args.single:
             for page in range(1, pages):
-                language_vacancies_page = get_sj_vacancies(sj_key, keyword, page).json()
+                language_vacancies_page = get_sj_response(sj_key, keyword, page).json()
                 vacancies_pages.append(language_vacancies_page)
 
         language_vacancies = []

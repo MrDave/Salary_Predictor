@@ -1,7 +1,7 @@
 import requests
 
 
-def get_hh_vacancies(search_query, period=None, page=0):
+def get_hh_response(search_query, period=None, page=0):
 
     url = "https://api.hh.ru/vacancies"
 
@@ -42,7 +42,7 @@ def predict_hh_rub_salary(vacancy):
     return predicted_hh_salary
 
 
-def get_sj_vacancies(secret_key: str, keyword: str, page=0):
+def get_sj_response(secret_key: str, keyword: str, page=0):
 
     url = "https://api.superjob.ru/2.0/vacancies/"
     headers = {

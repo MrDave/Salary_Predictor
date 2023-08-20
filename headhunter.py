@@ -1,5 +1,5 @@
 from argparse import ArgumentParser
-from functions import get_hh_vacancies, predict_hh_rub_salary
+from functions import get_hh_response, predict_hh_rub_salary
 from terminaltables import AsciiTable
 from time import sleep
 import datetime
@@ -27,14 +27,14 @@ def print_hh_table(args):
 
         vacancies_pages = []
 
-        language_vacancies_page_0 = get_hh_vacancies(search_query, period=30).json()
+        language_vacancies_page_0 = get_hh_response(search_query, period=30).json()
         number_found = language_vacancies_page_0["found"]
         pages = language_vacancies_page_0["pages"]
         vacancies_pages.append(language_vacancies_page_0)
 
         if not args.single:
             for page in range(1, pages):
-                language_vacancies_page = get_hh_vacancies(search_query, period=30, page=page).json()
+                language_vacancies_page = get_hh_response(search_query, period=30, page=page).json()
                 vacancies_pages.append(language_vacancies_page)
                 sleep(0.5)
 
