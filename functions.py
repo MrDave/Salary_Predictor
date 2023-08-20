@@ -28,7 +28,7 @@ def get_hh_vacancies(search_query, period=None, page=0):
     }
     params = {
         "text": search_query,
-        "area": 1,
+        "area": 1,  # area code for Moscow from HeadHunter API documentation
         "period": period,
         "order_by": "relevance",
         "page": page
@@ -69,7 +69,7 @@ def get_sj_vacancies(secret_key: str, keyword: str, page=0):
 
     params = {
         "catalogues": 48,
-        "town": 4,
+        "town": 4,  # area code for Moscow from SuperJob API documentation
         "keyword": keyword,
         "count": 20,
         "page": page

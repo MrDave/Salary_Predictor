@@ -27,7 +27,7 @@ def print_hh_table(args):
 
         vacancies_pages = []
 
-        language_vacancies_page_0 = get_hh_vacancies(search_query, 30).json()
+        language_vacancies_page_0 = get_hh_vacancies(search_query, period=30).json()
         number_found = language_vacancies_page_0["found"]
         pages = get_hh_page_count(language_vacancies_page_0)
         vacancies_pages.append(language_vacancies_page_0)
