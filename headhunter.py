@@ -47,9 +47,9 @@ def print_hh_table(args):
 
         for vacancy in language_vacancies:
             predicted_salary = predict_hh_rub_salary(vacancy)
-            if predicted_salary is not None:
+            if predicted_salary:
                 predicted_salaries.append(predicted_salary)
-
+        
         vacancies[language] = {
             "vacancies_found": number_found,
             "vacancies_processed": len(predicted_salaries),

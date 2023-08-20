@@ -44,7 +44,7 @@ def print_sj_table(sj_key, args):
         predicted_salaries = []
         for vacancy in language_vacancies:
             predicted_salary = predict_sj_rub_salary(vacancy)
-            if predicted_salary is not None:
+            if predicted_salary:
                 predicted_salaries.append(predicted_salary)
         try:
             avg_salary = int(sum(predicted_salaries) / len(predicted_salaries))
