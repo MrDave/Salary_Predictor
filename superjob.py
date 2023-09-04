@@ -11,10 +11,10 @@ def get_sj_stats(sj_key, single_page=False):
         keyword = language
         vacancy_pages = []
 
-        language_vacancy_page_0 = get_sj_response(sj_key, keyword).json()
-        number_found = language_vacancy_page_0["total"]
+        page_0 = get_sj_response(sj_key, keyword).json()
+        number_found = page_0["total"]
         pages = ceil(number_found / 20)
-        vacancy_pages.append(language_vacancy_page_0)
+        vacancy_pages.append(page_0)
 
         if not single_page:
             for page in range(1, pages):

@@ -11,10 +11,10 @@ def get_hh_stats(single_page=False):
 
         vacancy_pages = []
 
-        language_vacancy_page_0 = get_hh_response(search_query, period=30).json()
-        number_found = language_vacancy_page_0["found"]
-        pages = language_vacancy_page_0["pages"]
-        vacancy_pages.append(language_vacancy_page_0)
+        page_0 = get_hh_response(search_query, period=30).json()
+        number_found = page_0["found"]
+        pages = page_0["pages"]
+        vacancy_pages.append(page_0)
 
         if not single_page:
             for page in range(1, pages):
