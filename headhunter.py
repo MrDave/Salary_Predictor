@@ -1,5 +1,5 @@
 from argparse import ArgumentParser
-from functions import get_hh_response, predict_hh_rub_salary
+from handlers import get_hh_response, predict_hh_rub_salary
 from terminaltables import AsciiTable
 from time import sleep
 import datetime

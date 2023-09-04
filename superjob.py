@@ -1,6 +1,6 @@
 from argparse import ArgumentParser
 from environs import Env
-from functions import get_sj_response, predict_sj_rub_salary
+from handlers import get_sj_response, predict_sj_rub_salary
 from math import ceil
 from terminaltables import AsciiTable
 import datetime
