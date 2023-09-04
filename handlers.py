@@ -1,7 +1,19 @@
 import requests
 from terminaltables import AsciiTable
 
-from main import LANGUAGES
+
+LANGUAGES = [
+        "JavaScript",
+        "Java",
+        "Python",
+        "Ruby",
+        "PHP",
+        "C++",
+        "C#",
+        "C",
+        "Go",
+        "Shell"
+    ]
 
 
 def get_hh_response(search_query, period=None, page=0):

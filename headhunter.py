@@ -1,12 +1,9 @@
-from argparse import ArgumentParser
-from handlers import get_hh_response, predict_hh_rub_salary, print_job_table
+from handlers import get_hh_response, predict_hh_rub_salary
 from time import sleep
-import datetime
-
-from main import LANGUAGES
+from handlers import LANGUAGES
 
 
-def get_hh_stats(args):
+def get_hh_stats(single_page=False):
     vacancies = {}
 
     for language in LANGUAGES:
@@ -19,7 +16,7 @@ def get_hh_stats(args):
         pages = language_vacancy_page_0["pages"]
         vacancy_pages.append(language_vacancy_page_0)
 
-        if not args.single:
+        if not single_page:
             for page in range(1, pages):
                 language_vacancies_page = get_hh_response(search_query, period=30, page=page).json()
                 vacancy_pages.append(language_vacancies_page)
@@ -47,33 +44,3 @@ def get_hh_stats(args):
         sleep(2)
 
     return vacancies
-
-
-if __name__ == '__main__':
-    parser = ArgumentParser(
-        description="Get job offers from HeadHunter website and compare their average salaries"
-    )
-    parser.add_argument(
-        "-s",
-        "--single",
-        help="fetch only a single page instead of all",
-        action="store_true"
-    )
-    parser.add_argument(
-        "-t",
-        "--timer",
-        action="store_true",
-        help="add start and end time of script running after the results"
-    )
-
-    args = parser.parse_args()
-    start_time = datetime.datetime.now()
-
-    hh_stats = get_hh_stats(args)
-    table_title = "HeadHunter Moscow"
-    print_job_table(hh_stats, table_title)
-
-    end_time = datetime.datetime.now()
-    run_time = (end_time - start_time).seconds
-    if args.timer:
-        print(f"Start time: {start_time}\nEnd time: {end_time}\nTotal time: {run_time} second(s)")
