@@ -1,4 +1,7 @@
 import requests
+from terminaltables import AsciiTable
+
+from main import LANGUAGES
 
 
 def get_hh_response(search_query, period=None, page=0):
@@ -8,9 +11,10 @@ def get_hh_response(search_query, period=None, page=0):
     headers = {
         "HH-User-Agent": ""
     }
+    moscow_area_code = 1
     params = {
         "text": search_query,
-        "area": 1,  # area code for Moscow from HeadHunter API documentation
+        "area": moscow_area_code,
         "period": period,
         "order_by": "relevance",
         "page": page
@@ -48,10 +52,10 @@ def get_sj_response(secret_key: str, keyword: str, page=0):
     headers = {
         "X-Api-App-Id": secret_key
     }
-
+    moscow_area_code = 4
     params = {
         "catalogues": 48,
-        "town": 4,  # area code for Moscow from SuperJob API documentation
+        "town": moscow_area_code,
         "keyword": keyword,
         "count": 20,
         "page": page
@@ -67,3 +71,20 @@ def predict_sj_rub_salary(vacancy):
     if vacancy["currency"] != "rub":
         return None
     return predict_salary(vacancy["payment_from"], vacancy["payment_to"])
+
+
+def print_job_table(vacancies, title):
+
+    header_row = [
+        "Language",
+        "Vacancies Found",
+        "Vacancies Processed",
+        "Average Salary, RUB"
+    ]
+    table_content = [header_row]
+    for language in LANGUAGES:
+        new_row = [language] + list(vacancies[language].values())
+        table_content.append(new_row)
+    table = AsciiTable(table_content, title)
+    print()
+    print(table.table)

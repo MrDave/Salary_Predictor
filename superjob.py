@@ -1,29 +1,16 @@
 from argparse import ArgumentParser
 from environs import Env
-from handlers import get_sj_response, predict_sj_rub_salary
+from handlers import get_sj_response, predict_sj_rub_salary, print_job_table
 from math import ceil
-from terminaltables import AsciiTable
 import datetime
+from main import LANGUAGES
 
 
-def print_sj_table(sj_key, args):
-    start_time = datetime.datetime.now()
+def get_sj_stats(sj_key, args):
 
     vacancies = {}
-    languages = [
-        "JavaScript",
-        "Java",
-        "Python",
-        "Ruby",
-        "PHP",
-        "C++",
-        "C#",
-        "C",
-        "Go",
-        "Shell"
-    ]
 
-    for language in languages:
+    for language in LANGUAGES:
         keyword = language
         vacancy_pages = []
 
@@ -56,24 +43,7 @@ def print_sj_table(sj_key, args):
             "average_salary": avg_salary
         }
 
-    header_row = [
-        "Language",
-        "Vacancies Found",
-        "Vacancies Processed",
-        "Average Salary, RUB"
-    ]
-    table_content = [header_row]
-    for language in languages:
-        new_row = [language] + list(vacancies[language].values())
-        table_content.append(new_row)
-    table = AsciiTable(table_content, "SuperJob Moscow")
-    print()
-    print(table.table)
-
-    end_time = datetime.datetime.now()
-    run_time = (end_time - start_time).seconds
-    if args.timer:
-        print(f"Start time: {start_time}\nEnd time: {end_time}\nTotal time: {run_time} second(s)")
+    return vacancies
 
 
 if __name__ == '__main__':
@@ -100,4 +70,13 @@ if __name__ == '__main__':
 
     sj_key = env.str("SJ_KEY")
 
-    print_sj_table(sj_key, args)
+    start_time = datetime.datetime.now()
+
+    sj_jobs = get_sj_stats(sj_key, args)
+    table_title = "SuperJob Moscow"
+    print_job_table(sj_jobs, table_title)
+
+    end_time = datetime.datetime.now()
+    run_time = (end_time - start_time).seconds
+    if args.timer:
+        print(f"Start time: {start_time}\nEnd time: {end_time}\nTotal time: {run_time} second(s)")

@@ -1,7 +1,21 @@
-from headhunter import print_hh_table
-from superjob import print_sj_table
+from headhunter import get_hh_stats
+from superjob import get_sj_stats
 from environs import Env
 from argparse import ArgumentParser
+
+LANGUAGES = [
+        "JavaScript",
+        "Java",
+        "Python",
+        "Ruby",
+        "PHP",
+        "C++",
+        "C#",
+        "C",
+        "Go",
+        "Shell"
+    ]
+
 
 if __name__ == '__main__':
     parser = ArgumentParser(
@@ -27,5 +41,5 @@ if __name__ == '__main__':
 
     sj_key = env.str("SJ_KEY")
 
-    print_hh_table(args)
-    print_sj_table(sj_key, args)
+    get_hh_stats(args)
+    get_sj_stats(sj_key, args)

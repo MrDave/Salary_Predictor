@@ -1,28 +1,15 @@
 from argparse import ArgumentParser
-from handlers import get_hh_response, predict_hh_rub_salary
-from terminaltables import AsciiTable
+from handlers import get_hh_response, predict_hh_rub_salary, print_job_table
 from time import sleep
 import datetime
 
+from main import LANGUAGES
 
-def print_hh_table(args):
-    start_time = datetime.datetime.now()
 
+def get_hh_stats(args):
     vacancies = {}
-    languages = [
-        "JavaScript",
-        "Java",
-        "Python",
-        "Ruby",
-        "PHP",
-        "C++",
-        "C#",
-        "C",
-        "Go",
-        "Shell"
-    ]
 
-    for language in languages:
+    for language in LANGUAGES:
         search_query = f"Программист {language}"
 
         vacancy_pages = []
@@ -57,26 +44,9 @@ def print_hh_table(args):
             "vacancies_processed": len(predicted_salaries),
             "average_salary": avg_salary
         }
-    sleep(2)
+        sleep(2)
 
-    header_row = [
-        "Language",
-        "Vacancies Found",
-        "Vacancies Processed",
-        "Average Salary, RUB"
-    ]
-    table_content = [header_row]
-    for language in languages:
-        new_row = [language] + list(vacancies[language].values())
-        table_content.append(new_row)
-    table = AsciiTable(table_content, "HeadHunter Moscow")
-    print()
-    print(table.table)
-
-    end_time = datetime.datetime.now()
-    run_time = (end_time - start_time).seconds
-    if args.timer:
-        print(f"Start time: {start_time}\nEnd time: {end_time}\nTotal time: {run_time} second(s)")
+    return vacancies
 
 
 if __name__ == '__main__':
@@ -97,5 +67,13 @@ if __name__ == '__main__':
     )
 
     args = parser.parse_args()
+    start_time = datetime.datetime.now()
 
-    print_hh_table(args)
+    hh_stats = get_hh_stats(args)
+    table_title = "HeadHunter Moscow"
+    print_job_table(hh_stats, table_title)
+
+    end_time = datetime.datetime.now()
+    run_time = (end_time - start_time).seconds
+    if args.timer:
+        print(f"Start time: {start_time}\nEnd time: {end_time}\nTotal time: {run_time} second(s)")
