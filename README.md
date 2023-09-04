@@ -19,15 +19,12 @@ SJ_KEY = [your_key]
 ```
 ## How to use
 
-Scripts can be run separately to get tables from only a single website or together using the `main.py` (which essentially just runs both other scripts).
+Simply run `main.py`
 ```commandline
 python main.py
 ```
-OR
-```commandline
-python headhunter.py
-python superjob.py
-```
+**Be aware that this scripts need a lot of time to finish**  
+~10 minutes (unless some of the optional arguments are selected) 
 
 Example result:
 ```
@@ -69,8 +66,9 @@ Example result:
 Scripts accept arguments:
 - `-t`, `--timer` - add start and end time of script running after the results
 - `-s`, `--single` - only fetch the first page of the results (the first 20 job offers)
+- `--hh` - get stats only from HeadHunter
+- `--sj` - get stats only from SuperJob
 
-Both were mainly used for debugging purposes, however one might find them useful for whatever reason.
 
 Programming languages used in these scripts are:
 
@@ -85,7 +83,7 @@ Programming languages used in these scripts are:
 - Go
 - Shell
 
-They are hardcoded but can be changed for whatever other languages
+They are hardcoded in `handlers.py` but can be changed for whatever other languages if you wish so.
 
 ## Project Goals
 
