@@ -23,8 +23,8 @@ Simply run `main.py`
 ```commandline
 python main.py
 ```
-**Be aware that this scripts need a lot of time to finish**  
-~10 minutes (unless some of the optional arguments are selected) 
+**Be aware that this script needs a lot of time to finish**  
+It takes ~10 minutes (unless some of the optional arguments are selected) 
 
 Example result:
 ```
