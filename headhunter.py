@@ -65,11 +65,11 @@ def print_hh_table(args):
         "Vacancies Processed",
         "Average Salary, RUB"
     ]
-    table_data = [header_row]
+    table_content = [header_row]
     for language in languages:
         new_row = [language] + list(vacancies[language].values())
-        table_data.append(new_row)
-    table = AsciiTable(table_data, "HeadHunter Moscow")
+        table_content.append(new_row)
+    table = AsciiTable(table_content, "HeadHunter Moscow")
     print()
     print(table.table)
 

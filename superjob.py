@@ -62,11 +62,11 @@ def print_sj_table(sj_key, args):
         "Vacancies Processed",
         "Average Salary, RUB"
     ]
-    table_data = [header_row]
+    table_content = [header_row]
     for language in languages:
         new_row = [language] + list(vacancies[language].values())
-        table_data.append(new_row)
-    table = AsciiTable(table_data, "SuperJob Moscow")
+        table_content.append(new_row)
+    table = AsciiTable(table_content, "SuperJob Moscow")
     print()
     print(table.table)
 
