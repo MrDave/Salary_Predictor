@@ -25,23 +25,22 @@ def print_hh_table(args):
     for language in languages:
         search_query = f"Программист {language}"
 
-        vacancies_pages = []
+        vacancy_pages = []
 
-        language_vacancies_page_0 = get_hh_response(search_query, period=30).json()
-        number_found = language_vacancies_page_0["found"]
-        pages = language_vacancies_page_0["pages"]
-        vacancies_pages.append(language_vacancies_page_0)
+        language_vacancy_page_0 = get_hh_response(search_query, period=30).json()
+        number_found = language_vacancy_page_0["found"]
+        pages = language_vacancy_page_0["pages"]
+        vacancy_pages.append(language_vacancy_page_0)
 
         if not args.single:
             for page in range(1, pages):
                 language_vacancies_page = get_hh_response(search_query, period=30, page=page).json()
-                vacancies_pages.append(language_vacancies_page)
+                vacancy_pages.append(language_vacancies_page)
                 sleep(0.5)
 
         language_vacancies = []
-        for vacancy_page in vacancies_pages:
-            for vacancy in vacancy_page["items"]:
-                language_vacancies.append(vacancy)
+        for page in vacancy_pages:
+            language_vacancies.extend(vacancy for vacancy in page["items"])
 
         predicted_salaries = []
 

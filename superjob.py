@@ -25,22 +25,21 @@ def print_sj_table(sj_key, args):
 
     for language in languages:
         keyword = language
-        vacancies_pages = []
+        vacancy_pages = []
 
-        language_vacancies_page_0 = get_sj_response(sj_key, keyword).json()
-        number_found = language_vacancies_page_0["total"]
+        language_vacancy_page_0 = get_sj_response(sj_key, keyword).json()
+        number_found = language_vacancy_page_0["total"]
         pages = ceil(number_found / 20)
-        vacancies_pages.append(language_vacancies_page_0)
+        vacancy_pages.append(language_vacancy_page_0)
 
         if not args.single:
             for page in range(1, pages):
-                language_vacancies_page = get_sj_response(sj_key, keyword, page).json()
-                vacancies_pages.append(language_vacancies_page)
+                language_vacancy_page = get_sj_response(sj_key, keyword, page).json()
+                vacancy_pages.append(language_vacancy_page)
 
         language_vacancies = []
-        for vacancy_page in vacancies_pages:
-            for vacancy in vacancy_page["objects"]:
-                language_vacancies.append(vacancy)
+        for page in vacancy_pages:
+            language_vacancies.extend(vacancy for vacancy in page["objects"])
 
         predicted_salaries = []
         for vacancy in language_vacancies:
