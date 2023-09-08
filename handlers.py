@@ -65,11 +65,14 @@ def get_sj_response(secret_key: str, keyword: str, page=0):
         "X-Api-App-Id": secret_key
     }
     moscow_area_code = 4
+    programming_jobs_catalogue = 48
+    jobs_on_page = 20
+
     params = {
-        "catalogues": 48,
+        "catalogues": programming_jobs_catalogue,
         "town": moscow_area_code,
         "keyword": keyword,
-        "count": 20,
+        "count": jobs_on_page,
         "page": page
     }
 

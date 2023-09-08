@@ -5,15 +5,16 @@ from handlers import LANGUAGES
 
 def get_sj_stats(sj_key, single_page=False):
 
-    vacancies = {}
+    vacancy_stats = {}
 
     for language in LANGUAGES:
         keyword = language
         vacancy_pages = []
 
+        jobs_on_page = 20
         page_0 = get_sj_response(sj_key, keyword).json()
         number_found = page_0["total"]
-        pages = ceil(number_found / 20)
+        pages = ceil(number_found / jobs_on_page)
         vacancy_pages.append(page_0)
 
         if not single_page:
@@ -34,10 +35,10 @@ def get_sj_stats(sj_key, single_page=False):
             avg_salary = int(sum(predicted_salaries) / len(predicted_salaries))
         except ZeroDivisionError:
             avg_salary = "-"
-        vacancies[language] = {
+        vacancy_stats[language] = {
             "vacancies_found": number_found,
             "vacancies_processed": len(predicted_salaries),
             "average_salary": avg_salary
         }
 
-    return vacancies
+    return vacancy_stats

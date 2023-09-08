@@ -4,7 +4,7 @@ from handlers import LANGUAGES
 
 
 def get_hh_stats(single_page=False):
-    vacancies = {}
+    vacancy_stats = {}
 
     for language in LANGUAGES:
         search_query = f"Программист {language}"
@@ -36,11 +36,11 @@ def get_hh_stats(single_page=False):
             avg_salary = int(sum(predicted_salaries) / len(predicted_salaries))
         except ZeroDivisionError:
             avg_salary = "-"
-        vacancies[language] = {
+        vacancy_stats[language] = {
             "vacancies_found": number_found,
             "vacancies_processed": len(predicted_salaries),
             "average_salary": avg_salary
         }
         sleep(2)
 
-    return vacancies
+    return vacancy_stats
