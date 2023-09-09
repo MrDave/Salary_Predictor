@@ -39,17 +39,20 @@ if __name__ == '__main__':
     env = Env()
     env.read_env()
 
+    with open("languages.txt", "r") as lang_list:
+        languages = lang_list.read().split("\n")
+
     sj_key = env.str("SJ_KEY")
     if args.timer:
         start_time = datetime.datetime.now()
 
     if not args.sj:
-        hh_stats = get_hh_stats(args.single)
+        hh_stats = get_hh_stats(languages, args.single)
         hh_table_title = "HeadHunter Moscow"
         print_job_table(hh_stats, hh_table_title)
 
     if not args.hh:
-        sj_stats = get_sj_stats(sj_key, args.single)
+        sj_stats = get_sj_stats(sj_key, languages, args.single)
         sj_table_title = "SuperJob Moscow"
         print_job_table(sj_stats, sj_table_title)
 

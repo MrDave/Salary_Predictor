@@ -1,13 +1,12 @@
 from handlers import get_sj_response, predict_sj_rub_salary
 from math import ceil
-from handlers import LANGUAGES
 
 
-def get_sj_stats(sj_key, single_page=False):
+def get_sj_stats(sj_key, lang_list, single_page=False):
 
     vacancy_stats = {}
 
-    for language in LANGUAGES:
+    for language in lang_list:
         keyword = language
         vacancies = []
 

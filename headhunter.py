@@ -1,12 +1,11 @@
 from handlers import get_hh_response, predict_hh_rub_salary
 from time import sleep
-from handlers import LANGUAGES
 
 
-def get_hh_stats(single_page=False):
+def get_hh_stats(lang_list, single_page=False):
     vacancy_stats = {}
 
-    for language in LANGUAGES:
+    for language in lang_list:
         search_query = f"Программист {language}"
 
         vacancies = []
