@@ -9,26 +9,22 @@ def get_hh_stats(single_page=False):
     for language in LANGUAGES:
         search_query = f"Программист {language}"
 
-        vacancy_pages = []
+        vacancies = []
 
         page_0 = get_hh_response(search_query, period=30).json()
         number_found = page_0["found"]
         pages = page_0["pages"]
-        vacancy_pages.append(page_0)
+        vacancies.extend(page_0["items"])
 
         if not single_page:
             for page in range(1, pages):
-                language_vacancies_page = get_hh_response(search_query, period=30, page=page).json()
-                vacancy_pages.append(language_vacancies_page)
+                vacancy_page = get_hh_response(search_query, period=30, page=page).json()
+                vacancies.extend(vacancy_page["items"])
                 sleep(0.5)
-
-        language_vacancies = []
-        for page in vacancy_pages:
-            language_vacancies.extend(vacancy for vacancy in page["items"])
 
         predicted_salaries = []
 
-        for vacancy in language_vacancies:
+        for vacancy in vacancies:
             predicted_salary = predict_hh_rub_salary(vacancy)
             if predicted_salary:
                 predicted_salaries.append(predicted_salary)

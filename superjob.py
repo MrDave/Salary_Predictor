@@ -9,25 +9,21 @@ def get_sj_stats(sj_key, single_page=False):
 
     for language in LANGUAGES:
         keyword = language
-        vacancy_pages = []
+        vacancies = []
 
         jobs_on_page = 20
         page_0 = get_sj_response(sj_key, keyword).json()
         number_found = page_0["total"]
         pages = ceil(number_found / jobs_on_page)
-        vacancy_pages.append(page_0)
+        vacancies.extend(page_0["objects"])
 
         if not single_page:
             for page in range(1, pages):
-                language_vacancy_page = get_sj_response(sj_key, keyword, page).json()
-                vacancy_pages.append(language_vacancy_page)
-
-        language_vacancies = []
-        for page in vacancy_pages:
-            language_vacancies.extend(vacancy for vacancy in page["objects"])
+                vacancy_page = get_sj_response(sj_key, keyword, page).json()
+                vacancies.extend(vacancy_page["objects"])
 
         predicted_salaries = []
-        for vacancy in language_vacancies:
+        for vacancy in vacancies:
             predicted_salary = predict_sj_rub_salary(vacancy)
             if predicted_salary:
                 predicted_salaries.append(predicted_salary)
