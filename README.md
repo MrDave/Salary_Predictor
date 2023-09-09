@@ -24,7 +24,7 @@ Simply run `main.py`
 python main.py
 ```
 **Be aware that this script needs a lot of time to finish**  
-It takes ~10 minutes (unless some of the optional arguments are selected) 
+It takes ~10 minutes to complete (unless some of the optional arguments are selected)
 
 Example result:
 ```
@@ -70,7 +70,7 @@ Scripts accept arguments:
 - `--sj` - get stats only from SuperJob
 
 
-Programming languages used in these scripts are:
+Programming languages used in these scripts are specified in `languages.txt`:
 
 - JavaScript
 - Java
@@ -83,7 +83,7 @@ Programming languages used in these scripts are:
 - Go
 - Shell
 
-They are hardcoded in `handlers.py` but can be changed for whatever other languages if you wish so.
+They can be changed for whatever other languages if you wish so.
 
 ## Project Goals
 
