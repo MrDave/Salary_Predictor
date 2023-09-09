@@ -1,7 +1,7 @@
 from environs import Env
 from argparse import ArgumentParser
 import datetime
-from handlers import print_job_table
+from processing_handlers import print_job_table
 from headhunter import get_hh_stats
 from superjob import get_sj_stats
 

@@ -1,5 +1,6 @@
-from handlers import get_hh_response, predict_hh_rub_salary
+from processing_handlers import predict_salary
 from time import sleep
+from api_handlers import get_hh_response
 
 
 def get_hh_stats(lang_list, single_page=False):
@@ -39,3 +40,11 @@ def get_hh_stats(lang_list, single_page=False):
         sleep(2)
 
     return vacancy_stats
+
+
+def predict_hh_rub_salary(vacancy):
+    salary = vacancy["salary"]
+    if not salary or salary.get("currency") != "RUR":
+        return None
+    predicted_hh_salary = predict_salary(salary.get("from"), salary.get("to"))
+    return predicted_hh_salary

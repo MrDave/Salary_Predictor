@@ -1,5 +1,6 @@
-from handlers import get_sj_response, predict_sj_rub_salary
+from processing_handlers import predict_salary
 from math import ceil
+from api_handlers import get_sj_response
 
 
 def get_sj_stats(sj_key, lang_list, single_page=False):
@@ -37,3 +38,9 @@ def get_sj_stats(sj_key, lang_list, single_page=False):
         }
 
     return vacancy_stats
+
+
+def predict_sj_rub_salary(vacancy):
+    if vacancy["currency"] != "rub":
+        return None
+    return predict_salary(vacancy["payment_from"], vacancy["payment_to"])
